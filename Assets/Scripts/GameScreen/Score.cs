@@ -8,7 +8,7 @@ public class Score
 
     public Score()
     {
-        m_scores = new int[Enum.GetValues(typeof(PlayerTeam)).Length];
+        m_scores = new int[2];
         Reset();
     }
 
@@ -20,36 +20,13 @@ public class Score
         }
     }
 
-    public int GetScore(PlayerTeam team)
+    public int GetScore(int index)
     {
-        return m_scores[(int)team];
+        return m_scores[index];
     }
 
-    public void AddScore(PlayerTeam team, int score)
+    public void AddScore(int index, int score)
     {
-        m_scores[(int)team] += score;
-    }
-
-    public PlayerTeam GetLeadingTeam(PlayerTeam biddingTeam)
-    {
-        int team1Score = GetScore(PlayerTeam.Team1);
-        int team2Score = GetScore(PlayerTeam.Team2);
-
-        if(team2Score == team1Score)
-        {
-              if(biddingTeam == PlayerTeam.Team1)  
-              {
-                  return PlayerTeam.Team2;
-              }
-              else
-              {
-                  return PlayerTeam.Team1;
-              }
-        }
-        else if(team1Score > team2Score)
-        {
-            return PlayerTeam.Team1;
-        }
-        return PlayerTeam.Team2;
+        m_scores[index] += score;
     }
 }

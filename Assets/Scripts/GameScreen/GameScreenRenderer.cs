@@ -68,7 +68,7 @@ public class GameScreenRenderer : ScreenRenderer
         {
             if(Screen.Score != null)
             {
-                GUI.Label(new Rect(UnityEngine.Screen.width - 320, 200, 100, 30), "Score : " + Screen.Score.GetScore(PlayerTeam.Team1) + " / " + Screen.Score.GetScore(PlayerTeam.Team2));
+                GUI.Label(new Rect(UnityEngine.Screen.width - 320, 200, 100, 30), "Score : " + Screen.Score.GetScore(0) + " / " + Screen.Score.GetScore(1));
                 GUI.Label(new Rect(UnityEngine.Screen.width - 320, 230, 100, 30), "Trump : " + Screen.Trump);
                 GUI.Label(new Rect(UnityEngine.Screen.width - 320, 260, 100, 30), "Dealer : " + Screen.Dealer.Name);
                 GUI.Label(new Rect(UnityEngine.Screen.width - 320, 290, 100, 30), "Bidder : " + Screen.Bidder.Name);
@@ -197,7 +197,7 @@ public class GameScreenRenderer : ScreenRenderer
 
         float spacing = -0.4f;
 
-        if(player.Position == PlayerPosition.South)
+      /*  if(player.Position == PlayerPosition.South)
         {
             spawnRef.x = -0.5f * halfWidth;
             spawnRef.y = -0.75f * halfHeight;   
@@ -217,7 +217,7 @@ public class GameScreenRenderer : ScreenRenderer
             spawnRef.x = 0.85f * halfWidth;
             spawnRef.y = 0.8f * halfHeight;    
         }
-        
+        */
         foreach (Card card in player.Hand)
         {
             EyepatchCardComponent cardComp = GetCardComponent(card);
@@ -227,7 +227,7 @@ public class GameScreenRenderer : ScreenRenderer
 
                 Renderer renderer = cardComp.gameObject.GetComponent<Renderer>();
 
-                if(player.Position == PlayerPosition.South)
+             /*   if(player.Position == PlayerPosition.South)
                 {
                     spawnRef.x += renderer.bounds.size.x + spacing;
                 }
@@ -246,7 +246,7 @@ public class GameScreenRenderer : ScreenRenderer
                     spawnRef.y -= (renderer.bounds.size.x + spacing);
                     rotation.z = -90.0f;
                     cardComp.gameObject.transform.eulerAngles = rotation;
-                }
+                } */
             }
         }
     }
@@ -263,7 +263,7 @@ public class GameScreenRenderer : ScreenRenderer
             EyepatchCardComponent cardComp = GetCardComponent(card);
             if (cardComp)
             {
-                if(player.Position == PlayerPosition.South)
+              /*  if(player.Position == PlayerPosition.South)
                 {
                     spawnRef.x = 0.0f;
                     spawnRef.y = -0.25f * halfHeight;  
@@ -282,7 +282,7 @@ public class GameScreenRenderer : ScreenRenderer
                 {
                     spawnRef.x = 0.20f * halfWidth;  
                     spawnRef.y = 0.0f;  
-                }
+                } */
                 
                 cardComp.SetInitialPosition(spawnRef);
             }

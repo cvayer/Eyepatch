@@ -101,19 +101,14 @@ public class GameScreen : Screen, IDeckOwner
         get { return m_pastFolds; }
     }
 
-    public PlayerTeam? LastFoldingTeam
-    {
-        get; set;
-    }
-
     public Fold LastFold
     {
         get 
         { 
-            if(LastFoldingTeam != null && PastFolds[(int)LastFoldingTeam].Count > 0)
+         /*   if(LastFoldingTeam != null && PastFolds[(int)LastFoldingTeam].Count > 0)
             {
                 return PastFolds[(int)LastFoldingTeam].Last();   
-            }
+            }*/
             return null;
         }
     }
@@ -137,7 +132,7 @@ public class GameScreen : Screen, IDeckOwner
         m_endState = EndState.None;
         m_deck = new EyepatchDeck(this);
         m_currentFold = new Fold(); 
-        m_pastFolds = new List<Fold>[Enum.GetValues(typeof(PlayerTeam)).Length];
+        m_pastFolds = new List<Fold>[2];
 
         for(int i = 0; i < m_pastFolds.Length; ++i)
         {
@@ -219,13 +214,11 @@ public class GameScreen : Screen, IDeckOwner
     }
 
     //----------------------------------------------
-    protected void AddPlayer<PlayerType>(PlayerTeam team, PlayerPosition position, string name)  where PlayerType : Player, new()
+    protected void AddPlayer<PlayerType>(string name)  where PlayerType : Player, new()
     {
         PlayerType newPlayer = new PlayerType();
         newPlayer.Screen = this;
-        newPlayer.Team = team;
         newPlayer.Name = name;
-        newPlayer.Position = position;
         newPlayer.Init();
         m_players.Add(newPlayer);
         
@@ -234,10 +227,8 @@ public class GameScreen : Screen, IDeckOwner
     //----------------------------------------------
     protected void AddPlayers()
     {
-        AddPlayer<HumanPlayer>(PlayerTeam.Team1, PlayerPosition.South, "South");
-        AddPlayer<AIPlayer>(PlayerTeam.Team2, PlayerPosition.West, "West");
-        AddPlayer<AIPlayer>(PlayerTeam.Team1, PlayerPosition.North, "North");
-        AddPlayer<AIPlayer>(PlayerTeam.Team2, PlayerPosition.East, "East");
+        AddPlayer<HumanPlayer>("South");
+        AddPlayer<AIPlayer>("West");
     }
 
     protected Player GetLeftPlayer(Player player)
@@ -309,7 +300,7 @@ public class GameScreen : Screen, IDeckOwner
     {
         m_roundScore.Reset();
     
-        for(int i = 0; i < m_pastFolds.Length; ++i)
+      /*  for(int i = 0; i < m_pastFolds.Length; ++i)
         {
             PlayerTeam team = (PlayerTeam) i;
             List<Fold> folds = m_pastFolds[i];
@@ -330,7 +321,7 @@ public class GameScreen : Screen, IDeckOwner
         if(LastFoldingTeam != null)
         {
             Score.AddScore((PlayerTeam)LastFoldingTeam, 10);
-        }
+        }*/
         NewRoundEvent evt = Pools.Claim<NewRoundEvent>();
         evt.Start = false;
         EventManager.SendEvent(evt);
@@ -370,11 +361,11 @@ public class GameScreen : Screen, IDeckOwner
             CurrentFold.Finalize(Trump);
 
             Player winner = CurrentFold.Winner;
-            LastFoldingTeam = winner.Team;
+          /*  LastFoldingTeam = winner.Team;
 
             Fold newFold = new Fold();
             CurrentFold.MoveTo(newFold);
-            PastFolds[(int)winner.Team].Add(newFold);
+            PastFolds[(int)winner.Team].Add(newFold);*/
 
             // New player has no cards in hand, we end the round
             if(winner.Hand.Empty)

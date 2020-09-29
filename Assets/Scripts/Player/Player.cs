@@ -32,8 +32,6 @@ public class Player : IDeckOwner
         }
     }
 
-    public PlayerTeam Team { get; set; }
-
     public EyepatchDeck Hand
     {
         get
@@ -48,8 +46,6 @@ public class Player : IDeckOwner
     }
 
     public string Name { get; set; }
-
-    public PlayerPosition Position { get; set; }
 
     //----------------------------------------------
     public Player()
@@ -127,6 +123,7 @@ public class Player : IDeckOwner
     List<EyepatchCard>  m_trumpCards = new List<EyepatchCard> ();
     List<EyepatchCard>  m_trumpBetterCards = new List<EyepatchCard> ();
 
+    //----------------------------------------------
     protected EyepatchDeck ComputePlayableCards(Fold fold, EyepatchCardFamily trumpFamily)
     {
         EyepatchDeck playables = new EyepatchDeck();
@@ -185,33 +182,26 @@ public class Player : IDeckOwner
                 if(playables.Empty)
                 {
                     // Best card is partner we can play what we want
-                    if(bestPlayer.Team == this.Team)
+                    if(bestCard.Family == trumpFamily)
                     {
-                        playables.CopyFrom(Hand);
-                    }
-                    else
-                    {
-                        if(bestCard.Family == trumpFamily)
+                        if(m_trumpBetterCards.Count > 0)
                         {
-                            if(m_trumpBetterCards.Count > 0)
-                            {
-                                playables.AddCards(m_trumpBetterCards);
-                            }
-                            else // TODO : Add "pisser" rules
-                            {
-                                playables.AddCards(m_trumpCards);
-                            }
+                            playables.AddCards(m_trumpBetterCards);
                         }
-                        else
+                        else // TODO : Add "pisser" rules
                         {
                             playables.AddCards(m_trumpCards);
                         }
-
-                        if(playables.Empty)
-                        {
-                            playables.CopyFrom(Hand);
-                        }    
                     }
+                    else
+                    {
+                        playables.AddCards(m_trumpCards);
+                    }
+
+                    if(playables.Empty)
+                    {
+                        playables.CopyFrom(Hand);
+                    }    
                 }
             }
         }
