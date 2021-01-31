@@ -217,7 +217,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc30bf66642b8c2498afc874e79f0127, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ScreenDefinition: {fileID: 0}
+  ScreenDefinition: {fileID: 11400000, guid: b1f745cae6da73d48a68009bfb4259ab, type: 2}
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
