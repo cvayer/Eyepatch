@@ -6,7 +6,7 @@ using UnityEngine;
 // EyepatchCard
 //----------------------------------------------
 //----------------------------------------------
-public partial class EyepatchCard  : Card
+public partial class EyepatchCard  : BaseCard
 {
     //----------------------------------------------
     // Variables
