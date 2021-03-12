@@ -1,6 +1,6 @@
 ﻿using System;
 using UnityEngine;
-
+using Pebble;
 public class AIPlayer : Player
 {
     public AIPlayer()
@@ -38,7 +38,7 @@ public class AIPlayer : Player
         if(TurnPlayableCards != null && ! TurnPlayableCards.Empty)
         {
             int indexToPlay = UnityEngine.Random.Range(0, TurnPlayableCards.Size);
-            Play(TurnPlayableCards.Cards[indexToPlay], Screen.CurrentFold);
+            Play(TurnPlayableCards.Cards[indexToPlay], Stage.CurrentFold);
         }
          
     }

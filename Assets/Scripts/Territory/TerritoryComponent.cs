@@ -1,6 +1,6 @@
 ﻿using System;
 using UnityEngine;
-
+using Pebble;
 //----------------------------------------------
 //----------------------------------------------
 // Card
@@ -148,9 +148,9 @@ public class TerritoryComponent : MonoBehaviour
 
             m_isSelected = selected;
 
-            EyepatchCard.Selected evt = Pools.Claim<EyepatchCard.Selected>();
+            /*EyepatchCard.Selected evt = Pools.Claim<EyepatchCard.Selected>();
             evt.Init(m_card, m_isSelected, isInHandArea);
-            EventManager.SendEvent(evt);
+            EventManager.SendEvent(evt);*/
         }
     }
 

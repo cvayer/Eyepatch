@@ -1,12 +1,13 @@
 using System;
 using UnityEngine;
+using Pebble;
 
 //-------------------------------------------------------
 //-------------------------------------------------------
 // EyepatchGame
 //-------------------------------------------------------
 //-------------------------------------------------------
-public class EyepatchGame : ScreenComponent<GameScreen, GameScreenRenderer, GameScreenDefinition>
+public class EyepatchGame : StageComponent<GameStage, GameStageRenderer, GameDefinition>
 {
 
 }

@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
+using Pebble;
 
-
 //-------------------------------------------------------
 //-------------------------------------------------------
-// GameScreenDefinition
+// GameDefinition
 //-------------------------------------------------------
 //-------------------------------------------------------
-public class GameScreenDefinition : ScreenDefinition
+public class GameDefinition : StageDefinition
 { 
     public EyepatchRules Rules;
 }

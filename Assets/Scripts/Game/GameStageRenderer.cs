@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Pebble;
 
 //-------------------------------------------------------
 //-------------------------------------------------------
-// GameScreenRenderer
+// GameRenderer
 //-------------------------------------------------------
 //-------------------------------------------------------
-public class GameScreenRenderer : ScreenRenderer
+public class GameStageRenderer : StageRenderer
 {
     //----------------------------------------------
     // Variables
@@ -16,18 +17,18 @@ public class GameScreenRenderer : ScreenRenderer
     //----------------------------------------------
     // Properties
 
-    public new GameScreen Screen
+    public new GameStage Stage
     {
         get 
         { 
-            return base.Screen as GameScreen;
+            return base.Stage as GameStage;
         }
     }
 
     //----------------------------------------------
     // Methods
     //-------------------------------------------------------
-    public GameScreenRenderer()
+    public GameStageRenderer()
     {
         m_cards = new List<EyepatchCardComponent>();
     }
@@ -35,15 +36,15 @@ public class GameScreenRenderer : ScreenRenderer
     protected override void OnInit()
     {
         EventManager.Subscribe<EyepatchCard.Played>(this.OnCardPlayed, EventChannel.Post);
-        EventManager.Subscribe<GameScreen.NewRoundEvent>(this.OnNewRound);
-        EventManager.Subscribe<GameScreen.NewTurnEvent>(this.OnNewTurn);
+        EventManager.Subscribe<GameStage.NewRoundEvent>(this.OnNewRound);
+        EventManager.Subscribe<GameStage.NewTurnEvent>(this.OnNewTurn);
     }
 
     protected override void OnShutdown()
     {
         EventManager.UnSubscribe<EyepatchCard.Played>(this.OnCardPlayed, EventChannel.Post);
-        EventManager.UnSubscribe<GameScreen.NewRoundEvent>(this.OnNewRound);
-        EventManager.UnSubscribe<GameScreen.NewTurnEvent>(this.OnNewTurn);
+        EventManager.UnSubscribe<GameStage.NewRoundEvent>(this.OnNewRound);
+        EventManager.UnSubscribe<GameStage.NewTurnEvent>(this.OnNewTurn);
     }
 
     protected override void OnStart()
@@ -64,15 +65,15 @@ public class GameScreenRenderer : ScreenRenderer
 
     protected override void OnUpdateGUI()
     {
-        if(!Screen.HasEnded)
+        if(!Stage.HasEnded)
         {
-            if(Screen.Score != null)
+            if(Stage.Score != null)
             {
-                GUI.Label(new Rect(UnityEngine.Screen.width - 320, 200, 100, 30), "Score : " + Screen.Score.GetScore(0) + " / " + Screen.Score.GetScore(1));
-                GUI.Label(new Rect(UnityEngine.Screen.width - 320, 230, 100, 30), "Trump : " + Screen.Trump);
-                GUI.Label(new Rect(UnityEngine.Screen.width - 320, 260, 100, 30), "Dealer : " + Screen.Dealer.Name);
-                GUI.Label(new Rect(UnityEngine.Screen.width - 320, 290, 100, 30), "Bidder : " + Screen.Bidder.Name);
-                GUI.Label(new Rect(UnityEngine.Screen.width - 320, 320, 100, 30), "Current : " + Screen.CurrentPlayer.Name);
+                GUI.Label(new Rect(UnityEngine.Screen.width - 320, 200, 100, 30), "Score : " + Stage.Score.GetScore(0) + " / " + Stage.Score.GetScore(1));
+                GUI.Label(new Rect(UnityEngine.Screen.width - 320, 230, 100, 30), "Trump : " + Stage.Trump);
+                GUI.Label(new Rect(UnityEngine.Screen.width - 320, 260, 100, 30), "Dealer : " + Stage.Dealer.Name);
+                GUI.Label(new Rect(UnityEngine.Screen.width - 320, 290, 100, 30), "Bidder : " + Stage.Bidder.Name);
+                GUI.Label(new Rect(UnityEngine.Screen.width - 320, 320, 100, 30), "Current : " + Stage.CurrentPlayer.Name);
 
             }
             
@@ -106,7 +107,7 @@ public class GameScreenRenderer : ScreenRenderer
         }
         else
         {
-            if(Screen.Succeded)
+            if(Stage.Succeded)
             {
                 GUI.TextField(new Rect(20, UnityEngine.Screen.height - 160, 100, 30), "You win");
             }
@@ -117,7 +118,7 @@ public class GameScreenRenderer : ScreenRenderer
         }
     }
 
-    private void OnNewRound(GameScreen.NewRoundEvent evt)
+    private void OnNewRound(GameStage.NewRoundEvent evt)
     {
         // TODO : Spawn once, then invisible
         if(evt.Start)
@@ -132,7 +133,7 @@ public class GameScreenRenderer : ScreenRenderer
         Refresh();
     }
 
-    private void OnNewTurn(GameScreen.NewTurnEvent evt)
+    private void OnNewTurn(GameStage.NewTurnEvent evt)
     {
        Refresh();
     }
@@ -144,7 +145,7 @@ public class GameScreenRenderer : ScreenRenderer
 
     protected void SpawnCards()
     {
-        foreach (Player player in Screen.Players)
+        foreach (Player player in Stage.Players)
         {
             SpawnCards(player);
         }
@@ -178,7 +179,7 @@ public class GameScreenRenderer : ScreenRenderer
 
     void Refresh()
     {
-        foreach (Player player in Screen.Players)
+        foreach (Player player in Stage.Players)
         {
             RefreshHand(player);
         }
@@ -218,7 +219,7 @@ public class GameScreenRenderer : ScreenRenderer
             spawnRef.y = 0.8f * halfHeight;    
         }
         */
-        foreach (Card card in player.Hand)
+        foreach (BaseCard card in player.Hand)
         {
             EyepatchCardComponent cardComp = GetCardComponent(card);
             if (cardComp)
@@ -256,7 +257,7 @@ public class GameScreenRenderer : ScreenRenderer
         float halfHeight = Camera.main.orthographicSize;
         float halfWidth = halfHeight*Camera.main.aspect;
 
-        foreach (Card card in Screen.CurrentFold.Deck)
+        foreach (BaseCard card in Stage.CurrentFold.Deck)
         {
             Player player = card.Owner as Player;
 
@@ -291,10 +292,10 @@ public class GameScreenRenderer : ScreenRenderer
 
     void RemovePastFolds()
     {
-        Fold lastFold = Screen.LastFold;
+        Fold lastFold = Stage.LastFold;
         if(lastFold != null)
         {
-            foreach (Card card in lastFold.Deck)
+            foreach (BaseCard card in lastFold.Deck)
             {
                 EyepatchCardComponent cardComp = GetCardComponent(card);
                 if(cardComp != null)
@@ -305,7 +306,7 @@ public class GameScreenRenderer : ScreenRenderer
         }
     }
 
-    protected EyepatchCardComponent GetCardComponent(Card card)
+    protected EyepatchCardComponent GetCardComponent(BaseCard card)
     {
         foreach (EyepatchCardComponent cardObj in m_cards)
         {

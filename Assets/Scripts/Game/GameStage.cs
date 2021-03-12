@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Pebble;
 //----------------------------------------------
 //----------------------------------------------
-// GameScreen
+// Game
 //----------------------------------------------
 //----------------------------------------------
-public class GameScreen : Screen, IDeckOwner
+public class GameStage : Stage, IDeckOwner
 {
     public enum EndState
     {
@@ -113,11 +113,11 @@ public class GameScreen : Screen, IDeckOwner
         }
     }
 
-    public new GameScreenDefinition Definition
+    public new GameDefinition Definition
     {
         get 
         { 
-            return base.Definition as GameScreenDefinition;
+            return base.Definition as GameDefinition;
         }
     }
 
@@ -125,7 +125,7 @@ public class GameScreen : Screen, IDeckOwner
     public EyepatchCardFamily Trump {get; set; }
 
     //----------------------------------------------
-    public GameScreen()
+    public GameStage()
     {
         m_players = new List<Player>();
         m_actionQueue = new ActionQueue();
@@ -145,8 +145,6 @@ public class GameScreen : Screen, IDeckOwner
     //----------------------------------------------
     protected override void OnInit()
     {
-        Renderer.SetScreen(this);
-
         m_deck.Init(Definition.Rules.Scoring);
 
         EventManager.Subscribe<EyepatchCard.Played>(this.OnCardPlayed);
@@ -217,7 +215,7 @@ public class GameScreen : Screen, IDeckOwner
     protected void AddPlayer<PlayerType>(string name)  where PlayerType : Player, new()
     {
         PlayerType newPlayer = new PlayerType();
-        newPlayer.Screen = this;
+        newPlayer.Stage = this;
         newPlayer.Name = name;
         newPlayer.Init();
         m_players.Add(newPlayer);
