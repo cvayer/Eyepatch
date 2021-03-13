@@ -79,26 +79,26 @@ public class GameStageRenderer : StageRenderer
             
 
             /*// UI display
-            HumanPlayer human = Screen.CurrentPlayer as HumanPlayer;
+            HumanPlayer human = Stage.CurrentPlayer as HumanPlayer;
             if (human != null)
             {
-                if (GUI.Button(new Rect(UnityEngine.Screen.width - 120, UnityEngine.Screen.height - 60, 100, 30), "End turn"))
+                if (GUI.Button(new Rect(UnityEngine.Stage.width - 120, UnityEngine.Stage.height - 60, 100, 30), "End turn"))
                 {
                     EventManager.SendEmptyPooledEvent<EndTurnButtonClicked>();
                 }
 
-                GUI.Label(new Rect(20, UnityEngine.Screen.height - 160, 100, 30), "Energy : " + human.Energy);
-                GUI.Label(new Rect(20, UnityEngine.Screen.height - 120, 100, 30), "DrawPile : " + human.DrawPile.Size);
-                GUI.Label(new Rect(UnityEngine.Screen.width - 120, UnityEngine.Screen.height - 120, 100, 30), "Discard : " + human.DiscardPile.Size);
+                GUI.Label(new Rect(20, UnityEngine.Stage.height - 160, 100, 30), "Energy : " + human.Energy);
+                GUI.Label(new Rect(20, UnityEngine.Stage.height - 120, 100, 30), "DrawPile : " + human.DrawPile.Size);
+                GUI.Label(new Rect(UnityEngine.Stage.width - 120, UnityEngine.Stage.height - 120, 100, 30), "Discard : " + human.DiscardPile.Size);
             }
 
 
             // MinionDisplay
 
-            foreach (Player combattant in Screen.Players)
+            foreach (Player combattant in Stage.Players)
             {
                 int y = 50;
-                int x = UnityEngine.Screen.width - 60;
+                int x = UnityEngine.Stage.width - 60;
                 if (combattant is HumanPlayer)
                 {
                     x = 30;
