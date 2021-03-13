@@ -4,12 +4,12 @@ using Pebble;
 
 //----------------------------------------------
 //----------------------------------------------
-// EyepatchCardStaticData
+// CardStaticData
 //----------------------------------------------
 //----------------------------------------------
-public class EyepatchCardStaticData : Singleton<EyepatchCardStaticData>
+public class CardStaticData : Singleton<CardStaticData>
 {
-    public EyepatchCardSpriteRef[] CardSprites;
+    public CardSpriteRef[] CardSprites;
 
     [AssetsOnly]
     public Sprite BackSprite;
@@ -20,7 +20,7 @@ public class EyepatchCardStaticData : Singleton<EyepatchCardStaticData>
 
     public Sprite GetSprite(Card32Value Value, Card32Family Family)
     {
-        foreach(EyepatchCardSpriteRef cardRef in CardSprites)
+        foreach(CardSpriteRef cardRef in CardSprites)
         {
             if(cardRef.Value == Value && cardRef.Family == Family)
             {

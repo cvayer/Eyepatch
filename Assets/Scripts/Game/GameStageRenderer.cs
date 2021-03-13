@@ -12,7 +12,7 @@ public class GameStageRenderer : StageRenderer
 {
     //----------------------------------------------
     // Variables
-    private List<EyepatchCardComponent> m_cards;
+    private List<CardComponent> m_cards;
 
     //----------------------------------------------
     // Properties
@@ -30,19 +30,19 @@ public class GameStageRenderer : StageRenderer
     //-------------------------------------------------------
     public GameStageRenderer()
     {
-        m_cards = new List<EyepatchCardComponent>();
+        m_cards = new List<CardComponent>();
     }
 
     protected override void OnInit()
     {
-        EventManager.Subscribe<EyepatchCard.Played>(this.OnCardPlayed, EventChannel.Post);
+        EventManager.Subscribe<Card.Played>(this.OnCardPlayed, EventChannel.Post);
         EventManager.Subscribe<GameStage.NewRoundEvent>(this.OnNewRound);
         EventManager.Subscribe<GameStage.NewTurnEvent>(this.OnNewTurn);
     }
 
     protected override void OnShutdown()
     {
-        EventManager.UnSubscribe<EyepatchCard.Played>(this.OnCardPlayed, EventChannel.Post);
+        EventManager.UnSubscribe<Card.Played>(this.OnCardPlayed, EventChannel.Post);
         EventManager.UnSubscribe<GameStage.NewRoundEvent>(this.OnNewRound);
         EventManager.UnSubscribe<GameStage.NewTurnEvent>(this.OnNewTurn);
     }
@@ -138,7 +138,7 @@ public class GameStageRenderer : StageRenderer
        Refresh();
     }
 
-    protected void OnCardPlayed(EyepatchCard.Played evt)
+    protected void OnCardPlayed(Card.Played evt)
     {
         Refresh();
     }
@@ -152,9 +152,9 @@ public class GameStageRenderer : StageRenderer
     }
     protected void SpawnCards(Player player)
     {
-        foreach (EyepatchCard card in player.Hand)
+        foreach (Card card in player.Hand)
         {
-            EyepatchCardComponent newCard = card.Spawn();
+            CardComponent newCard = card.Spawn();
             if (newCard)
             {
                 m_cards.Add(newCard);
@@ -164,14 +164,14 @@ public class GameStageRenderer : StageRenderer
 
     protected void UnSpawnCards()
     {
-        foreach (EyepatchCardComponent cardObj in m_cards)
+        foreach (CardComponent cardObj in m_cards)
         {
             UnityEngine.Object.Destroy(cardObj.gameObject);
         }
         m_cards.Clear();
     }
 
-    protected void UnSpawnCard(EyepatchCardComponent cardObj)
+    protected void UnSpawnCard(CardComponent cardObj)
     {
         m_cards.Remove(cardObj);
         UnityEngine.Object.Destroy(cardObj.gameObject);
@@ -183,10 +183,6 @@ public class GameStageRenderer : StageRenderer
         {
             RefreshHand(player);
         }
-
-        RefreshCurrentFold();
-
-        RemovePastFolds();
     }
 
      private Vector3 spawnRef = new Vector3();
@@ -221,7 +217,7 @@ public class GameStageRenderer : StageRenderer
         */
         foreach (BaseCard card in player.Hand)
         {
-            EyepatchCardComponent cardComp = GetCardComponent(card);
+            CardComponent cardComp = GetCardComponent(card);
             if (cardComp)
             {
                 cardComp.SetInitialPosition(spawnRef);
@@ -252,63 +248,9 @@ public class GameStageRenderer : StageRenderer
         }
     }
 
-    void RefreshCurrentFold()
+    protected CardComponent GetCardComponent(BaseCard card)
     {
-        float halfHeight = Camera.main.orthographicSize;
-        float halfWidth = halfHeight*Camera.main.aspect;
-
-        foreach (BaseCard card in Stage.CurrentFold.Deck)
-        {
-            Player player = card.Owner as Player;
-
-            EyepatchCardComponent cardComp = GetCardComponent(card);
-            if (cardComp)
-            {
-              /*  if(player.Position == PlayerPosition.South)
-                {
-                    spawnRef.x = 0.0f;
-                    spawnRef.y = -0.25f * halfHeight;  
-                }
-                else  if(player.Position == PlayerPosition.West)
-                {
-                    spawnRef.x = -0.20f * halfWidth;  
-                    spawnRef.y = 0.0f;  
-                }
-                else if(player.Position == PlayerPosition.North)
-                {
-                    spawnRef.x = 0.0f;
-                    spawnRef.y = 0.25f * halfHeight;
-                }
-                else // East
-                {
-                    spawnRef.x = 0.20f * halfWidth;  
-                    spawnRef.y = 0.0f;  
-                } */
-                
-                cardComp.SetInitialPosition(spawnRef);
-            }
-        }
-    }
-
-    void RemovePastFolds()
-    {
-        Fold lastFold = Stage.LastFold;
-        if(lastFold != null)
-        {
-            foreach (BaseCard card in lastFold.Deck)
-            {
-                EyepatchCardComponent cardComp = GetCardComponent(card);
-                if(cardComp != null)
-                {
-                    UnSpawnCard(cardComp);
-                }
-            }
-        }
-    }
-
-    protected EyepatchCardComponent GetCardComponent(BaseCard card)
-    {
-        foreach (EyepatchCardComponent cardObj in m_cards)
+        foreach (CardComponent cardObj in m_cards)
         {
             if(cardObj.Card == card)
             {

@@ -7,7 +7,7 @@ using Pebble;
 // Card
 //-------------------------------------------------------
 //-------------------------------------------------------
-public partial class EyepatchCard
+public partial class Card
 {
     //-------------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------------
@@ -16,11 +16,11 @@ public partial class EyepatchCard
     //-------------------------------------------------------------------------------------
     public class Selected : PooledEvent
     {
-        private EyepatchCard m_card;
+        private Card m_card;
         private bool m_selected;
         private bool m_outsideOfHand;
 
-        public EyepatchCard Card
+        public Card Card
         {
             get { return m_card; }
         }
@@ -42,7 +42,7 @@ public partial class EyepatchCard
             m_outsideOfHand = false;
         }
 
-        public void Init(EyepatchCard card, bool selected, bool outsideofHand)
+        public void Init(Card card, bool selected, bool outsideofHand)
         {
             m_card = card;
             m_selected = selected;
@@ -57,9 +57,9 @@ public partial class EyepatchCard
     //-------------------------------------------------------------------------------------
     public class Played : PooledEvent
     {
-        private EyepatchCard m_card;
+        private Card m_card;
 
-        public EyepatchCard Card
+        public Card Card
         {
             get { return m_card; }
         }
@@ -69,7 +69,7 @@ public partial class EyepatchCard
             m_card = null;
         }
 
-        public void Init(EyepatchCard card)
+        public void Init(Card card)
         {
             m_card = card;
         }

@@ -3,7 +3,7 @@ using UnityEngine;
 using Pebble;
 //----------------------------------------------
 //----------------------------------------------
-// EyepatchCard
+// Card
 //----------------------------------------------
 //----------------------------------------------
 public partial class Territory
@@ -19,9 +19,9 @@ public partial class Territory
     //----------------------------------------------
     public TerritoryComponent Spawn()
     {
-        if (EyepatchCardStaticData.Instance.Prefab != null)
+        if (CardStaticData.Instance.Prefab != null)
         {
-            GameObject cardObj = Object.Instantiate(EyepatchCardStaticData.Instance.Prefab) as GameObject;
+            GameObject cardObj = Object.Instantiate(CardStaticData.Instance.Prefab) as GameObject;
             TerritoryComponent territoryComp = cardObj.GetComponent<TerritoryComponent>();
             if(territoryComp != null)
             {

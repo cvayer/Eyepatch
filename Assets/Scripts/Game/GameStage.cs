@@ -19,10 +19,7 @@ public class GameStage : Stage, IDeckOwner
     //----------------------------------------------
     // Variables
     private List<Player>                       m_players;
-    private EyepatchDeck                       m_deck;
-    private Fold                               m_currentFold;
-
-    private List<Fold>[]                       m_pastFolds;
+    private Deck                       m_deck;
 
     private ActionQueue                        m_actionQueue;
 
@@ -91,28 +88,6 @@ public class GameStage : Stage, IDeckOwner
         get { return m_endState == EndState.Fail; }
     }
 
-    public Fold CurrentFold
-    {
-        get { return m_currentFold; }
-    }
-
-    public List<Fold>[] PastFolds
-    {
-        get { return m_pastFolds; }
-    }
-
-    public Fold LastFold
-    {
-        get 
-        { 
-         /*   if(LastFoldingTeam != null && PastFolds[(int)LastFoldingTeam].Count > 0)
-            {
-                return PastFolds[(int)LastFoldingTeam].Last();   
-            }*/
-            return null;
-        }
-    }
-
     public new GameDefinition Definition
     {
         get 
@@ -122,7 +97,7 @@ public class GameStage : Stage, IDeckOwner
     }
 
     
-    public EyepatchCardFamily Trump {get; set; }
+    public Card32Family Trump {get; set; }
 
     //----------------------------------------------
     public GameStage()
@@ -130,14 +105,7 @@ public class GameStage : Stage, IDeckOwner
         m_players = new List<Player>();
         m_actionQueue = new ActionQueue();
         m_endState = EndState.None;
-        m_deck = new EyepatchDeck(this);
-        m_currentFold = new Fold(); 
-        m_pastFolds = new List<Fold>[2];
-
-        for(int i = 0; i < m_pastFolds.Length; ++i)
-        {
-            m_pastFolds[i] = new List<Fold>();
-        }
+        m_deck = new Deck(this);
 
         Score = new Score();
     }
@@ -147,7 +115,7 @@ public class GameStage : Stage, IDeckOwner
     {
         m_deck.Init(Definition.Rules.Scoring);
 
-        EventManager.Subscribe<EyepatchCard.Played>(this.OnCardPlayed);
+        EventManager.Subscribe<Card.Played>(this.OnCardPlayed);
 
         AddPlayers();
     }
@@ -155,7 +123,7 @@ public class GameStage : Stage, IDeckOwner
     
     protected override void OnShutdown()
     {
-        EventManager.UnSubscribe<EyepatchCard.Played>(this.OnCardPlayed);
+        EventManager.UnSubscribe<Card.Played>(this.OnCardPlayed);
 
         foreach (Player player in m_players)
         {
@@ -280,7 +248,7 @@ public class GameStage : Stage, IDeckOwner
         // TODO : Bidding round, Random Trump for now
         // TODO : Bidder
         Bidder = RoundFirstPlayer;
-        Trump = (EyepatchCardFamily) UnityEngine.Random.Range(0, Enum.GetValues(typeof(EyepatchCardFamily)).Length);
+        Trump = (Card32Family) UnityEngine.Random.Range(0, Enum.GetValues(typeof(Card32Family)).Length);
         foreach (Player player in m_players)
         {
             player.Hand.SortByFamilyAndValue(Trump);
@@ -305,7 +273,7 @@ public class GameStage : Stage, IDeckOwner
             foreach(Fold fold in folds)
             {
                 m_roundScore.AddScore(team, fold.Points);  
-                fold.Deck.MoveAllCardsTo(m_deck);
+                fold.BaseDeck.MoveAllCardsTo(m_deck);
             }
         }
 
@@ -346,7 +314,7 @@ public class GameStage : Stage, IDeckOwner
         }
     }
 
-    protected void OnCardPlayed(EyepatchCard.Played evt)
+    protected void OnCardPlayed(Card.Played evt)
     {
         m_afterPlayTimer = s_afterPlayDuration;
     }
@@ -354,11 +322,9 @@ public class GameStage : Stage, IDeckOwner
     protected void OnAfterPlayTimerDone()
     {
         // One Fold is done, select new player.
-        if(CurrentFold.Deck.Size == Players.Count)
+        if(true)
         {
-            CurrentFold.Finalize(Trump);
-
-            Player winner = CurrentFold.Winner;
+            Player winner = null;
           /*  LastFoldingTeam = winner.Team;
 
             Fold newFold = new Fold();

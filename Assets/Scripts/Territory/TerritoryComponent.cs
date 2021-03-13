@@ -148,7 +148,7 @@ public class TerritoryComponent : MonoBehaviour
 
             m_isSelected = selected;
 
-            /*EyepatchCard.Selected evt = Pools.Claim<EyepatchCard.Selected>();
+            /*Card.Selected evt = Pools.Claim<Card.Selected>();
             evt.Init(m_card, m_isSelected, isInHandArea);
             EventManager.SendEvent(evt);*/
         }

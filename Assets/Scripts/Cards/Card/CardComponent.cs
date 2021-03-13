@@ -4,14 +4,14 @@ using Pebble;
 
 //----------------------------------------------
 //----------------------------------------------
-// Card
+// CardComponent
 //----------------------------------------------
 //----------------------------------------------
-public class EyepatchCardComponent : MonoBehaviour
+public class CardComponent : MonoBehaviour
 {
     //----------------------------------------------
     // Variables
-    private EyepatchCard m_card;
+    private Card m_card;
     private bool m_isHovered = false;
     private bool m_isSelected = false;
     private Vector3 m_initialPosition = new Vector3();
@@ -29,7 +29,7 @@ public class EyepatchCardComponent : MonoBehaviour
         get { return m_isSelected; }
     }
 
-    public EyepatchCard Card
+    public Card Card
     {
         get { return m_card; }
     }
@@ -40,7 +40,7 @@ public class EyepatchCardComponent : MonoBehaviour
         
     }
 
-    public void Init(EyepatchCard card)
+    public void Init(Card card)
     {
         m_card = card;
         m_isHovered = false;
@@ -158,7 +158,7 @@ public class EyepatchCardComponent : MonoBehaviour
 
             m_isSelected = selected;
 
-            EyepatchCard.Selected evt = Pools.Claim<EyepatchCard.Selected>();
+            Card.Selected evt = Pools.Claim<Card.Selected>();
             evt.Init(m_card, m_isSelected, isInHandArea);
             EventManager.SendEvent(evt);
         }

@@ -5,11 +5,11 @@ using Pebble;
 
 //-------------------------------------------------------
 //-------------------------------------------------------
-// EyepatchCardSpriteRef
+// CardSpriteRef
 //-------------------------------------------------------
 //-------------------------------------------------------
 [Serializable]
-public class EyepatchCardSpriteRef
+public class CardSpriteRef
 {
     public Card32Value Value;
     public Card32Family Family;

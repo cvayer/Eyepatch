@@ -13,7 +13,7 @@ public class Player : IDeckOwner
     //----------------------------------------------
     // Variables
     protected GameStage m_game;
-    private   EyepatchDeck m_hand;
+    private   Deck m_hand;
 
     private bool m_isAllowedToPlay = false;
 
@@ -32,7 +32,7 @@ public class Player : IDeckOwner
         }
     }
 
-    public EyepatchDeck Hand
+    public Deck Hand
     {
         get
         {
@@ -40,7 +40,7 @@ public class Player : IDeckOwner
         }
     }
 
-    public EyepatchDeck TurnPlayableCards
+    public Deck TurnPlayableCards
     {
         get; set;
     }
@@ -50,7 +50,7 @@ public class Player : IDeckOwner
     //----------------------------------------------
     public Player()
     {
-        m_hand = new EyepatchDeck(this);
+        m_hand = new Deck(this);
     }
 
     //----------------------------------------------
@@ -94,16 +94,16 @@ public class Player : IDeckOwner
     }
 
     //----------------------------------------------
-    protected void Play(EyepatchCard card, Fold fold)
+    protected void Play(Card card)
     {
         if (CanPlay(card))
         {
-            DoPlay(card, fold);
+            DoPlay(card);
         }
     }
 
     //----------------------------------------------
-    public bool CanPlay(EyepatchCard card)
+    public bool CanPlay(Card card)
     {
         if (m_isAllowedToPlay && Hand.Contains(card))
         {
@@ -114,97 +114,20 @@ public class Player : IDeckOwner
     }
 
     //----------------------------------------------
-    protected void DoPlay(EyepatchCard card, Fold fold)
+    protected void DoPlay(Card card)
     {
-        m_hand.MoveCardTo(card, fold.Deck);
+        //m_hand.MoveCardTo(card, fold.Deck);
         card.OnPlay();
     }
 
-    List<EyepatchCard>  m_trumpCards = new List<EyepatchCard> ();
-    List<EyepatchCard>  m_trumpBetterCards = new List<EyepatchCard> ();
+    List<Card>  m_trumpCards = new List<Card> ();
+    List<Card>  m_trumpBetterCards = new List<Card> ();
 
     //----------------------------------------------
-    protected EyepatchDeck ComputePlayableCards(Fold fold, EyepatchCardFamily trumpFamily)
+    protected Deck ComputePlayableCards(Card32Family trumpFamily)
     {
-        EyepatchDeck playables = new EyepatchDeck();
+        Deck playables = new Deck();
 
-        m_trumpCards.Clear();
-        m_trumpBetterCards.Clear();
-
-        if(!Hand.Empty)
-        {
-            // No cards in the fold, all cards are valid
-            if(fold.RequestedFamily == null)
-            {
-                playables.CopyFrom(Hand);
-            }
-            else
-            {
-                EyepatchCard bestCard = fold.GetBest(trumpFamily);
-                Player bestPlayer = bestCard.Owner as Player;
-
-                EyepatchCardFamily requestedFamily = (EyepatchCardFamily)fold.RequestedFamily;
-
-                // We look for cards of the requested families
-                foreach(EyepatchCard card in Hand.Cards)
-                {
-                    if(card.Family == requestedFamily)
-                    {
-                        playables.AddCard(card);
-                    }
-
-                    if(card.Family == trumpFamily)
-                    {
-                        m_trumpCards.Add(card);
-
-                        if(bestCard.Family == trumpFamily)
-                        {
-                            if(EyepatchCard.GetBestCard(card, bestCard, trumpFamily) == card)
-                            {
-                                m_trumpBetterCards.Add(card);
-                            }
-                        }
-                    }
-                }
-
-                // Remove all trump cards that are too low
-                if(!playables.Empty && trumpFamily == requestedFamily)
-                {
-                    if(m_trumpBetterCards.Count > 0)
-                    {
-                        playables.Clear();
-                        playables.AddCards(m_trumpBetterCards);
-                    }
-                }
-
-
-                // No card of the requested family
-                if(playables.Empty)
-                {
-                    // Best card is partner we can play what we want
-                    if(bestCard.Family == trumpFamily)
-                    {
-                        if(m_trumpBetterCards.Count > 0)
-                        {
-                            playables.AddCards(m_trumpBetterCards);
-                        }
-                        else // TODO : Add "pisser" rules
-                        {
-                            playables.AddCards(m_trumpCards);
-                        }
-                    }
-                    else
-                    {
-                        playables.AddCards(m_trumpCards);
-                    }
-
-                    if(playables.Empty)
-                    {
-                        playables.CopyFrom(Hand);
-                    }    
-                }
-            }
-        }
         return playables;
     }
 
@@ -222,7 +145,7 @@ public class Player : IDeckOwner
        {
            m_isAllowedToPlay = true;
 
-           TurnPlayableCards = ComputePlayableCards(Stage.CurrentFold, Stage.Trump);
+           TurnPlayableCards = ComputePlayableCards(Stage.Trump);
            OnTurnStart();
        }
     }

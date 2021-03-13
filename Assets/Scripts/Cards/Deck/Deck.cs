@@ -8,17 +8,17 @@ using Pebble;
 //----------------------------------------------
 //----------------------------------------------
 
-public class EyepatchDeck : Deck<EyepatchCard>
+public class Deck : BaseDeck<Card>
 {
     //------------------------------------------------------
-    public EyepatchDeck()
+    public Deck()
      : base()
     {
         
     }
 
     //------------------------------------------------------
-    public EyepatchDeck(IDeckOwner owner)
+    public Deck(IDeckOwner owner)
      : base(owner)
     {
 
@@ -27,11 +27,11 @@ public class EyepatchDeck : Deck<EyepatchCard>
     //------------------------------------------------------
     public void Init(ScoringRules scoring)
     {
-        foreach(EyepatchCardFamily family in (EyepatchCardFamily[])System.Enum.GetValues(typeof(EyepatchCardFamily)))
+        foreach(Card32Family family in (Card32Family[])System.Enum.GetValues(typeof(Card32Family)))
         {
-            foreach (EyepatchCardValue value in (EyepatchCardValue[])System.Enum.GetValues(typeof(EyepatchCardValue)))
+            foreach (Card32Value value in (Card32Value[])System.Enum.GetValues(typeof(Card32Value)))
             {
-                EyepatchCard card = new EyepatchCard();
+                Card card = new Card();
                 card.Family = family;
                 card.Value = value;
                 card.Point = scoring.GetPoint(value, false);
@@ -41,11 +41,11 @@ public class EyepatchDeck : Deck<EyepatchCard>
         }
     }
 
-    class CardComparer : IComparer<EyepatchCard>
+    class CardComparer : IComparer<Card>
     {
-        public EyepatchCardFamily? TrumpFamily { get; set; }
+        public Card32Family? TrumpFamily { get; set; }
 
-        public int Compare(EyepatchCard a, EyepatchCard b)
+        public int Compare(Card a, Card b)
         {
             int compareFamily = a.Family.CompareTo(b.Family);
             if(compareFamily == 0)
@@ -72,7 +72,7 @@ public class EyepatchDeck : Deck<EyepatchCard>
     }
 
     static CardComparer s_comparer = new CardComparer();
-    public void SortByFamilyAndValue(EyepatchCardFamily? trumpFamily)
+    public void SortByFamilyAndValue(Card32Family? trumpFamily)
     {
         s_comparer.TrumpFamily = trumpFamily;
         Cards.Sort(s_comparer);

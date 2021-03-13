@@ -4,10 +4,10 @@ using Pebble;
 
 //----------------------------------------------
 //----------------------------------------------
-// EyepatchCard
+// Card
 //----------------------------------------------
 //----------------------------------------------
-public partial class EyepatchCard  : BaseCard
+public partial class Card  : BaseCard
 {
     //----------------------------------------------
     // Variables
@@ -15,21 +15,21 @@ public partial class EyepatchCard  : BaseCard
     public int Point { get; set; }
     public int TrumpPoint { get; set; }
 
-    public EyepatchCardValue Value { get; set; }
-    public EyepatchCardFamily Family { get; set; }
+    public Card32Value Value { get; set; }
+    public Card32Family Family { get; set; }
 
     //----------------------------------------------
-    public EyepatchCard()
+    public Card()
     {
     }
 
     //----------------------------------------------
-    public EyepatchCardComponent Spawn()
+    public CardComponent Spawn()
     {
-        if (EyepatchCardStaticData.Instance.Prefab != null)
+        if (CardStaticData.Instance.Prefab != null)
         {
-            GameObject cardObj = Object.Instantiate(EyepatchCardStaticData.Instance.Prefab) as GameObject;
-            EyepatchCardComponent cardComp = cardObj.GetComponent<EyepatchCardComponent>();
+            GameObject cardObj = Object.Instantiate(CardStaticData.Instance.Prefab) as GameObject;
+            CardComponent cardComp = cardObj.GetComponent<CardComponent>();
             if(cardComp != null)
             {
                 cardComp.Init(this);
@@ -46,7 +46,7 @@ public partial class EyepatchCard  : BaseCard
         EventManager.SendEvent(evt);
     }
 
-    public int GetPoint(EyepatchCardFamily? trumpFamily)
+    public int GetPoint(Card32Family? trumpFamily)
     {
         if(trumpFamily != null && Family == trumpFamily)
         {
@@ -60,7 +60,7 @@ public partial class EyepatchCard  : BaseCard
         return "(" + Value + " " + Family + ")";
     }
 
-     public static EyepatchCard GetBestCard(EyepatchCard a, EyepatchCard b, EyepatchCardFamily trumpFamily)
+     public static Card GetBestCard(Card a, Card b, Card32Family trumpFamily)
     {
         if(a.Family == b.Family)
         {

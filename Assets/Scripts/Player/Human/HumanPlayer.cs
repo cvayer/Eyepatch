@@ -18,20 +18,20 @@ public class HumanPlayer : Player
     //----------------------------------------------
     protected override void OnInit()
     {
-        EventManager.Subscribe<EyepatchCard.Selected>(this.OnCardSelectedEvent);
+        EventManager.Subscribe<Card.Selected>(this.OnCardSelectedEvent);
     }
 
     //--------------------------------------------------------------------
     protected override void OnShutdown()
     {
-        EventManager.UnSubscribe<EyepatchCard.Selected>(this.OnCardSelectedEvent);
+        EventManager.UnSubscribe<Card.Selected>(this.OnCardSelectedEvent);
     }
 
-    private void OnCardSelectedEvent(EyepatchCard.Selected evt)
+    private void OnCardSelectedEvent(Card.Selected evt)
     {
         if(evt.IsSelected == false && evt.OutsideOfHand)
         {
-            Play(evt.Card, Stage.CurrentFold);
+            Play(evt.Card);
         }
     }
 }
