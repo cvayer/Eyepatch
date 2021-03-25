@@ -113,8 +113,6 @@ public class GameStage : Stage, IDeckOwner
     //----------------------------------------------
     protected override void OnInit()
     {
-        m_deck.Init(Definition.Rules.Scoring);
-
         EventManager.Subscribe<Card.Played>(this.OnCardPlayed);
 
         AddPlayers();
@@ -216,7 +214,7 @@ public class GameStage : Stage, IDeckOwner
     {
         // TODO : Cut
         // New dealer is the left player of the current player
-        Dealer = GetLeftPlayer(Dealer);
+     /*   Dealer = GetLeftPlayer(Dealer);
         RoundFirstPlayer = GetLeftPlayer(Dealer);
    
         for(int  iDeal = 0; iDeal < Definition.Rules.Dealing.Dealings.Count; ++iDeal)
@@ -230,12 +228,7 @@ public class GameStage : Stage, IDeckOwner
                 player = GetLeftPlayer(player); 
             }
             while(player != RoundFirstPlayer);
-        }
-
-        foreach (Player player in m_players)
-        {
-            player.Hand.SortByFamilyAndValue(null);
-        }
+        }*/
     }
 
     //----------------------------------------------
@@ -244,15 +237,6 @@ public class GameStage : Stage, IDeckOwner
         m_currentRound++;
 
         DealCards();
-
-        // TODO : Bidding round, Random Trump for now
-        // TODO : Bidder
-        Bidder = RoundFirstPlayer;
-        Trump = (Card32Family) UnityEngine.Random.Range(0, Enum.GetValues(typeof(Card32Family)).Length);
-        foreach (Player player in m_players)
-        {
-            player.Hand.SortByFamilyAndValue(Trump);
-        }
 
         NewRoundEvent evt = Pools.Claim<NewRoundEvent>();
         evt.Start = true;
@@ -349,6 +333,8 @@ public class GameStage : Stage, IDeckOwner
             StartTurn(GetLeftPlayer(CurrentPlayer));    
         }
     }
+
+
 
     //------------------------------------
     // Events

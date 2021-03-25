@@ -7,7 +7,7 @@ using Pebble;
 // EyepatchGame
 //-------------------------------------------------------
 //-------------------------------------------------------
-public class EyepatchGame : StageComponent<GameStage, GameStageRenderer, GameDefinition>
+public class EyepatchGame : StageComponent<GameStage, GameDefinition>
 {
 
 }

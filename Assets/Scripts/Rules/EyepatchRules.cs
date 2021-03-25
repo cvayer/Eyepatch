@@ -6,7 +6,7 @@ using System;
 [Serializable]
 public class EyepatchRules
 { 
-    public DealingRules Dealing;
+    public SetupRules Setup;
 
     public ScoringRules Scoring;
 
